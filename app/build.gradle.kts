@@ -47,6 +47,7 @@ dependencies {
     implementation(libs.androidx.navigation)
     implementation(libs.androidx.foundation)
     implementation(libs.androidx.compose.runtime.livedata)
+    implementation(libs.androidx.compose.ui)
     debugImplementation("androidx.compose.ui:ui-tooling:1.7.2")
 
     implementation("com.google.android.material:material:1.12.0")

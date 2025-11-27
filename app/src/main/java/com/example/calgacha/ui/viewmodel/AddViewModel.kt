@@ -64,7 +64,7 @@ class AddViewModel(private val repository: ChickenRepository) : ViewModel() {
         imageUri.value = uri
     }
 
-    // 🚀 AHORA ESTE MÉTODO TAMBIÉN ENVÍA LOS DATOS A LA API Y A ROOM
+
     fun addChicken(imagePath: String?, onChickenAdded: () -> Unit) {
         viewModelScope.launch {
 
@@ -89,7 +89,6 @@ class AddViewModel(private val repository: ChickenRepository) : ViewModel() {
             )
             repository.createRemoteChicken(newChickenApi)
 
-            // 3️⃣ Callback para volver atrás
             onChickenAdded()
         }
     }
@@ -105,7 +104,7 @@ class AddViewModel(private val repository: ChickenRepository) : ViewModel() {
                 description.value.isNotBlank()
     }
 
-    // ⬇️ Guardar imagen desde URI (galería)
+
     fun saveImageToInternalStorage(context: Context, uri: Uri): String {
         val inputStream = context.contentResolver.openInputStream(uri)
         val fileName = "chicken_${System.currentTimeMillis()}.jpg"
@@ -119,7 +118,7 @@ class AddViewModel(private val repository: ChickenRepository) : ViewModel() {
         return file.absolutePath
     }
 
-    // ⬇️ Guardar Bitmap (cámara)
+
     fun saveBitmapToInternalStorage(context: Context, bitmap: Bitmap): String {
         val fileName = "chicken_${System.currentTimeMillis()}.jpg"
         val file = File(context.filesDir, fileName)

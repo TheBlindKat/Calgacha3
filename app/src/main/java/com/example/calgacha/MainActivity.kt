@@ -39,10 +39,10 @@ class MainActivity : ComponentActivity() {
 
         val database = AppDatabase.getDatabase(applicationContext)
 
-        // ⬅️ Retrofit API
+        // Retrofit API
         val api = RetrofitInstance.api
 
-        // ⬅️ Repositorio con DAO + API
+        //  Repositorio DAO/ API
         val chickenRepository = ChickenRepository(
             chickenDao = database.chickenDao(),
             api = api
@@ -111,7 +111,7 @@ fun App(factory: ViewModelFactory) {
 
 
             composable(
-                route = Routes.HISTORY_DETAIL, // ← Esto es "Detalles_Historial/{itemId}"
+                route = Routes.HISTORY_DETAIL,
                 arguments = listOf(navArgument("itemId") { type = NavType.IntType })
             ) { backStackEntry ->
                 val id = backStackEntry.arguments?.getInt("itemId") ?: -1

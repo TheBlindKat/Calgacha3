@@ -38,7 +38,7 @@ fun AddScreen(vm: AddViewModel, navController: NavController) {
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            // Permiso concedido
+
         }
     }
 

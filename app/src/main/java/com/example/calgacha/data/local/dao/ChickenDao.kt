@@ -14,7 +14,7 @@ interface ChickenDao {
     @Query("SELECT * FROM Gallinas WHERE id = :id")
     suspend fun getChickenById(id: Int): Chicken?
     @Query("SELECT * FROM Gallinas")
-    fun getAllChickens(): Flow<List<Chicken>> // Changed to return Flow
+    fun getAllChickens(): Flow<List<Chicken>>
     @Delete
     suspend fun deleteChicken(chicken: Chicken)
 

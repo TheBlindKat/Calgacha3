@@ -12,10 +12,7 @@ class ChickenRepository(
     private val chickenDao: ChickenDao,
     private val api: ChickenApiService
 ) {
-
-    // --------------------------------------------------
-    // 🟢 ROOM (LOCAL)
-    // --------------------------------------------------
+    //local
     fun getChickens(): Flow<List<Chicken>> =
         chickenDao.getAllChickens()
 
@@ -29,9 +26,7 @@ class ChickenRepository(
         chickenDao.deleteChicken(chicken)
 
 
-    // --------------------------------------------------
-    // 🟦 API REMOTA
-    // --------------------------------------------------
+    //api
     suspend fun getRemoteChickens(): List<ChickenApi>? = withContext(Dispatchers.IO) {
         val res = api.getChickens()
         if (res.isSuccessful) res.body() else null
@@ -51,9 +46,7 @@ class ChickenRepository(
         api.deleteChicken(id).isSuccessful
     }
 
-    // --------------------------------------------------
-    // 🟣 Sincronización API → ROOM
-    // --------------------------------------------------
+    //api con el room
     suspend fun getChickensFromApi(): List<Chicken> {
         val remote = getRemoteChickens() ?: return emptyList()
 
@@ -74,7 +67,7 @@ class ChickenRepository(
 
         remoteChickens.forEach { apiModel ->
             val localEntity = Chicken(
-                id = 0,  // Room autogenera ID
+                id = 0,
                 nombre = apiModel.nombre,
                 edad = apiModel.edad,
                 raza = apiModel.raza,
