@@ -1,6 +1,5 @@
 package com.example.calgacha.data.remote
 
-import androidx.compose.ui.graphics.vector.Path
 import com.example.calgacha.data.remote.model.ChickenApi
 import retrofit2.Response
 import retrofit2.http.*
@@ -9,6 +8,8 @@ interface ChickenApiService {
 
     @GET("chickens")
     suspend fun getChickens(): Response<List<ChickenApi>>
+    @GET("chickens/{id}")
+    suspend fun getChickenById(@Path("id") id: String): Response<ChickenApi>
 
     @POST("chickens")
     suspend fun createChicken(@Body chicken: ChickenApi): Response<ChickenApi>

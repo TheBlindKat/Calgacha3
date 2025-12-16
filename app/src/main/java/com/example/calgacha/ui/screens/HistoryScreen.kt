@@ -1,6 +1,5 @@
 package com.example.calgacha.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -8,18 +7,16 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-
 import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Refresh
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
-import androidx.datastore.preferences.protobuf.LazyStringArrayList.emptyList
 import androidx.navigation.NavController
 import coil.compose.AsyncImage
 import com.example.calgacha.data.local.model.Chicken
@@ -27,14 +24,24 @@ import com.example.calgacha.ui.viewmodel.MainViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HistoryScreen(viewModel: MainViewModel, navController: NavController, onItemClick: (Int) -> Unit) {
-    val localChickens = viewModel.chickens.collectAsState()
-    val apiChickens = viewModel.apiChickens.observeAsState(emptyList())
-
-
+fun HistoryScreen(
+    viewModel: MainViewModel,
+    navController: NavController,
+    onItemClick: (Int) -> Unit
+) {
+    val chickens = viewModel.chickens.collectAsState()
 
     Scaffold(
-        topBar = { TopAppBar(title = { Text("Historial") }) }
+        topBar = {
+            TopAppBar(
+                title = { Text("Historial Local") },
+                actions = {
+                    IconButton(onClick = { viewModel.syncFromApi() }) {
+                        Icon(Icons.Default.Refresh, "Sincronizar desde API")
+                    }
+                }
+            )
+        }
     ) { padding ->
         LazyColumn(
             modifier = Modifier
@@ -42,11 +49,9 @@ fun HistoryScreen(viewModel: MainViewModel, navController: NavController, onItem
                 .padding(padding),
             contentPadding = PaddingValues(8.dp)
         ) {
-            val all = apiChickens.value + localChickens.value
-
-            items(all) { chicken ->
+            items(chickens.value) { chicken ->
                 HistoryItemRow(
-                    chicken = chicken as Chicken,
+                    chicken = chicken,
                     onClick = { onItemClick(chicken.id) },
                     onDelete = { viewModel.deleteChicken(chicken) }
                 )
@@ -71,7 +76,6 @@ fun HistoryItemRow(chicken: Chicken, onClick: () -> Unit, onDelete: () -> Unit) 
                 .padding(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // ⬇️ Miniatura de imagen
             if (chicken.imagenUri != null) {
                 AsyncImage(
                     model = chicken.imagenUri,
@@ -82,7 +86,6 @@ fun HistoryItemRow(chicken: Chicken, onClick: () -> Unit, onDelete: () -> Unit) 
                     contentScale = ContentScale.Crop
                 )
             } else {
-                // Ícono por defecto si no hay imagen
                 Icon(
                     imageVector = Icons.Default.Face,
                     contentDescription = "Sin imagen",
@@ -123,4 +126,3 @@ fun HistoryItemRow(chicken: Chicken, onClick: () -> Unit, onDelete: () -> Unit) 
         }
     }
 }
-
