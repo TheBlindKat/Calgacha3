@@ -40,6 +40,7 @@ class AddViewModel(private val repository: ChickenRepository) : ViewModel() {
             value.isBlank() -> "La edad no puede estar vacía"
             value.toIntOrNull() == null -> "La edad debe ser un número válido"
             value.toIntOrNull() == 0 -> "La edad debe ser mayor a 0"
+            value.toIntOrNull()!! < 0 -> "La edad no puede ser negativa"
             else -> null
         }
     }
@@ -79,6 +80,7 @@ class AddViewModel(private val repository: ChickenRepository) : ViewModel() {
             )
             repository.insertChicken(newChicken)
 
+
             // 2️⃣ Guardar en API remota
             val newChickenApi = ChickenApi(
                 nombre = name.value,
@@ -89,8 +91,22 @@ class AddViewModel(private val repository: ChickenRepository) : ViewModel() {
             )
             repository.createRemoteChicken(newChickenApi)
 
+            clearForm()
+
             onChickenAdded()
         }
+    }
+    fun clearForm() {
+        name.value = ""
+        age.value = ""
+        breed.value = ""
+        description.value = ""
+        imageUri.value = null
+
+        nameError.value = null
+        ageError.value = null
+        breedError.value = null
+        descriptionError.value = null
     }
 
     fun isFormValid(): Boolean {

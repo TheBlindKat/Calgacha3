@@ -24,6 +24,8 @@ class ChickenRepository(
 
     suspend fun deleteChicken(chicken: Chicken) =
         chickenDao.deleteChicken(chicken)
+    suspend fun updateChicken(chicken: Chicken) =
+        chickenDao.updateChicken(chicken)
 
 
     //api

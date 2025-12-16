@@ -4,6 +4,7 @@ import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
+import androidx.room.Update
 import com.example.calgacha.data.local.model.Chicken
 import kotlinx.coroutines.flow.Flow
 
@@ -17,6 +18,8 @@ interface ChickenDao {
     fun getAllChickens(): Flow<List<Chicken>>
     @Delete
     suspend fun deleteChicken(chicken: Chicken)
+    @Update
+    suspend fun updateChicken(chicken: Chicken)
 
 
 }

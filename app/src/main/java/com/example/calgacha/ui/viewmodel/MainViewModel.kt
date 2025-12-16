@@ -17,7 +17,6 @@ class MainViewModel(private val chickenRepository: ChickenRepository) : ViewMode
     // 🟢 LOCAL (ROOM)
     // ============================================
 
-    // Gallinas locales (Room)
     val chickens: StateFlow<List<Chicken>> =
         chickenRepository.getChickens()
             .stateIn(
@@ -32,6 +31,13 @@ class MainViewModel(private val chickenRepository: ChickenRepository) : ViewMode
         }
     }
 
+    // ⬇️ NUEVA FUNCIÓN: Actualizar gallina local
+    fun updateChicken(chicken: Chicken) {
+        viewModelScope.launch {
+            chickenRepository.updateChicken(chicken)
+        }
+    }
+
     suspend fun getChickenById(id: Int): Chicken? {
         return chickenRepository.getChickenById(id)
     }
@@ -40,7 +46,6 @@ class MainViewModel(private val chickenRepository: ChickenRepository) : ViewMode
     // 🟦 REMOTO (API)
     // ============================================
 
-    // Gallinas remotas (API) - ChickenApi
     private val _remoteChickens = MutableStateFlow<List<ChickenApi>>(emptyList())
     val remoteChickens: StateFlow<List<ChickenApi>> = _remoteChickens
 
@@ -61,7 +66,7 @@ class MainViewModel(private val chickenRepository: ChickenRepository) : ViewMode
         viewModelScope.launch {
             val success = chickenRepository.deleteRemoteChicken(apiId)
             if (success) {
-                loadRemoteChickens() // Recargar lista después de eliminar
+                loadRemoteChickens()
             }
         }
     }
@@ -70,7 +75,7 @@ class MainViewModel(private val chickenRepository: ChickenRepository) : ViewMode
         viewModelScope.launch {
             val created = chickenRepository.createRemoteChicken(chicken)
             if (created != null) {
-                loadRemoteChickens() // Recargar lista
+                loadRemoteChickens()
             }
         }
     }
@@ -79,7 +84,7 @@ class MainViewModel(private val chickenRepository: ChickenRepository) : ViewMode
         viewModelScope.launch {
             val updated = chickenRepository.updateRemoteChicken(id, chicken)
             if (updated != null) {
-                loadRemoteChickens() // Recargar lista
+                loadRemoteChickens()
             }
         }
     }
@@ -91,7 +96,6 @@ class MainViewModel(private val chickenRepository: ChickenRepository) : ViewMode
     fun syncFromApi() {
         viewModelScope.launch {
             chickenRepository.syncFromApi()
-            // Las gallinas locales se actualizan automáticamente por el Flow
         }
     }
 }

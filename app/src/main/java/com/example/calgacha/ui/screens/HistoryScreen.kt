@@ -102,7 +102,7 @@ fun HistoryItemRow(chicken: Chicken, onClick: () -> Unit, onDelete: () -> Unit) 
                     style = MaterialTheme.typography.titleMedium
                 )
                 Text(
-                    text = "Edad: ${chicken.edad} meses",
+                    text = "Edad: ${chicken.edad} años",
                     style = MaterialTheme.typography.bodySmall
                 )
                 Text(
